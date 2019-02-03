@@ -1,4 +1,5 @@
 venv/*
 *.un~
 *.pyc
-*.swp~
+*.swp
+*.csv

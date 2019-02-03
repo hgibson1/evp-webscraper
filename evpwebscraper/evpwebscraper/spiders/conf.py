@@ -1,12 +1,13 @@
-websites = [
-        "https://www.brooklinema.gov/131/Town-Clerk"
-        #"https://www.plymouth-ma.gov/town-clerk"
-]
-
-keywords = [
-        #"phone",
-        "town election",
-        #"vote",
-        #"voting",
-        "2019"
-    ]
+DATA_FILE_IN = 'ma-town-elections-2019-sheet1.csv'
+DATA_FILE_OUT = 'ma-town-elections-2019-sheet2.csv'
+HEADERS = {
+        'town': 'Municipality',
+        'government': 'Form of government',
+        'population': 'Population',
+        'date': 'Town Election Date',
+        'questions': 'Positions, Questions Up',
+        'issues': 'Environmetnal Issues? (Y/N)',
+        'website': 'Town Clerk Website',
+        'phone': 'Town Clerk Phone',
+        'notes': 'Notes'
+}
