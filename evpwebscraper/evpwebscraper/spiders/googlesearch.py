@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 
-from . conf import *
+from .. conf import *
 
 class GooglesearchSpider(scrapy.Spider):
     name = 'googlesearch'

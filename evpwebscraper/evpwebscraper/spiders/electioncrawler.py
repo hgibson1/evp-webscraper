@@ -5,8 +5,8 @@ from scrapy.linkextractors import LinkExtractor
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
-from . conf import *
-from . helper_functions import *
+from .. conf import *
+from .. helper_functions import *
 
 class ElectionCrawlerSpider(CrawlSpider):
     name = 'election_crawler'
