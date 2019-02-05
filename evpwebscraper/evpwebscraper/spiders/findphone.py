@@ -25,6 +25,8 @@ class FindphoneSpider(scrapy.Spider):
             yield scrapy.Request(url, callback=self.parse, dont_filter=True, meta={'index': index})
 
     def parse(self, response):
+        # Check status code
+
         # Extract all webpage text
         html = BeautifulSoup(response.text, 'lxml')
         # Remove javascript and stylesheets
@@ -37,7 +39,5 @@ class FindphoneSpider(scrapy.Spider):
         # Find coresponding town
         town_index = response.meta['index']
         self.towns[town_index][HEADERS['phone']] = text
-
-    def spider_closed(self, spider):
-        write_out_data(DATA_OUT_FILE, [HEADERS[key] for key in HEADERS], self.towns)
-
+        print(town_index)
+        print(text)
