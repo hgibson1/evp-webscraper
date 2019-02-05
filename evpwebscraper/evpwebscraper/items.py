@@ -7,8 +7,6 @@
 
 import scrapy
 
-
 class EvpwebscraperItem(scrapy.Item):
     # define the fields for your item here like:
-    raw_html = scrapy.Field()
-    town = scrapy.Field()
+    pass

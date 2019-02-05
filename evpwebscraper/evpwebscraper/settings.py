@@ -21,7 +21,7 @@ LOG_LEVEL = 'INFO'
 USER_AGENT = 'evpwebscraper (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 DOWNLOAD_TIMEOUT = 30
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
