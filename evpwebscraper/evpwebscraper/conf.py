@@ -11,3 +11,4 @@ HEADERS = {
         'phone': 'Town Clerk Phone',
         'notes': 'Notes'
 }
+API_KEY = 'AIzaSyCm6DNsx7IFGOeOEzBvWDa2Up1HQzJjUhc'
