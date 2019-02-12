@@ -4,3 +4,4 @@ venv/*
 *.swp
 *.csv
 *.log
+*.txt
