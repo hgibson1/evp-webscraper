@@ -18,19 +18,23 @@ def town_website_filter(href):
 class GooglesearchSpider(scrapy.Spider):
     name = 'googlesearch'
     allowed_domains = ['www.google.com']
-    towns = read_in_data(DATA_FILE_IN)
-    # Start url is google search url for MA
-    start_urls = ['https://www.google.com/search?q=town-clerk-{}-{}&start=0'.format(
+
+    def __init__(self, DATA_FILE_IN, state=STATE, **kwargs):
+        # Read in towns
+        self.towns = read_in_data(DATA_FILE_IN)
+        # Start url is google search url for MA
+        self.start_urls = ['https://www.google.com/search?q=town-clerk-{}-{}&start=0'.format(
             list(town.values())[0].lower(), 
-            STATE
-        ) for town in towns
-    ]
+            state) for town in self.towns
+        ]
+        # Print headers
+        self.headers = list(self.towns[0].keys())
+        self.headers.append('Town Clerk Website')
+        FEED_EXPORT_FIELDS = self.headers
+        super().__init__(**kwargs)
 
     def start_requests(self):
-        # Print headers
-        header_string = ','.join(list(self.towns[0].keys())) + ',Town Clerk Website'
-        print(header_string)
-        
+
         # Attach and index to the requests
         for index, url in enumerate(self.start_urls):
             yield scrapy.Request(url, callback=self.parse, dont_filter=True, meta={'index': index})
@@ -54,7 +58,8 @@ class GooglesearchSpider(scrapy.Spider):
         )
         for link in website_links:
             if re.match(pattern, link.lower()):
-                link_string = ','.join(list(self.towns[index].values())) + ',' + link
-                print(link_string)
+                values = list(self.towns[index].values())
+                values.append(link)
+                yield dict(zip(self.headers, values))
                 break
 

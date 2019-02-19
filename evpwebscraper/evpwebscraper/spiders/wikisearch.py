@@ -15,7 +15,11 @@ def element_filter(element):
 class WikisearchSpider(scrapy.Spider):
     name = 'wikisearch'
     allowed_domains = ['en.wikipedia.org']
-    start_urls = [WIKI_LINK]
+
+    def __init__(self, wiki_link=WIKI_LINK, **kwargs):
+        # Use wiki link in conf.py or passed as command line argument
+        self.start_urls = [wiki_link]
+        super().__init__(**kwargs)
 
     def parse(self, response):
         # Get HTML
@@ -29,11 +33,8 @@ class WikisearchSpider(scrapy.Spider):
         table = html.find('table')
 
         # Get table headers
-        headers = table.find_all('th')
-        header_string = headers[0].get_text().split('[')[0].strip()
-        for header in headers[1:]:
-            header_string = header_string + ',{}'.format(header.get_text().split('[')[0].strip())
-        print(header_string)
+        headers = [th.get_text().split('[')[0].strip() for th in table.find_all('th')]
+        FEED_EXPORT_FIELDS = headers
 
         # Get table rows
         rows = table.find_all('tr')
@@ -41,7 +42,6 @@ class WikisearchSpider(scrapy.Spider):
             elements = row.find_all('td')
             if len(elements) == 0:
                 continue
-            row_string = element_filter(elements[0])
-            for element in elements[1:]:
-                row_string = row_string + ',{}'.format(element_filter(element))
-            print(row_string)
+            filtered_elements = [element_filter(e) for e in elements]
+            yield dict(zip(headers, filtered_elements)) 
+

@@ -15,15 +15,18 @@ def filter_text(text):
 
 class FindphoneSpider(scrapy.Spider):
     name = 'findphone'
-    towns = read_in_data(DATA_FILE_IN)
-    start_urls = [list(town.values())[-1] for town in towns] # Last index is town website
-    allowed_domains = [urlparse(url).netloc for url in start_urls]
+
+    def __init__(self, DATA_FILE_IN, **kwargs):
+        self.towns = read_in_data(DATA_FILE_IN)
+        self.start_urls = [list(town.values())[-1] for town in self.towns] # Last index is town website
+        self.allowed_domains = [urlparse(url).netloc for url in self.start_urls]
+        # Print Headers
+        self.headers = list(self.towns[0].keys())
+        self.headers.append('Town Clerk Phone')
+        FEED_EXPORT_FIELDS = self.headers
+        super().__init__(**kwargs)  # python
 
     def start_requests(self):
-        # Print Headers
-        header_line = ','.join(list(self.towns[0].keys())) + ',Town Clerk Phone'
-        print(header_line)
-
         # Attach and index to the requests
         for index, url in enumerate(self.start_urls):
             yield scrapy.Request(url, callback=self.parse, dont_filter=True, meta={'index': index})
@@ -50,6 +53,7 @@ class FindphoneSpider(scrapy.Spider):
 
         # Correspond information with town
         index = response.meta['index']
-        phone_string = ','.join(list(self.towns[index].values())) + ',' + phone
-        print(phone_string)
+        values = list(self.towns[index].values())
+        values.append(phone)
+        yield dict(zip(self.headers, values))
 
