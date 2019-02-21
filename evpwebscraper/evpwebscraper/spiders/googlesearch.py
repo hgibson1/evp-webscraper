@@ -28,6 +28,7 @@ class GooglesearchSpider(scrapy.Spider):
         self.headers = list(self.towns[0].keys())
         self.headers.append('Town Clerk Website')
         FEED_EXPORT_FIELDS = self.headers
+        print(','.join(self.headers))
         super().__init__(**kwargs)
 
     def start_requests(self):
@@ -80,8 +81,8 @@ class GooglesearchSpider(scrapy.Spider):
         # Otherwise find first link on page
         if website is '':
             website = website_links[0]
-        print(website)
         values = list(self.towns[index].values())
         values.append(website)
+        print(','.join(values))
         yield dict(zip(self.headers, values))
 

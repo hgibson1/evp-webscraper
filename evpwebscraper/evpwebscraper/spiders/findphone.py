@@ -24,6 +24,7 @@ class FindphoneSpider(scrapy.Spider):
         self.headers = list(self.towns[0].keys())
         self.headers.append('Town Clerk Phone')
         FEED_EXPORT_FIELDS = self.headers
+        print(','.join(self.headers))
         super().__init__(**kwargs)  # python
 
     def start_requests(self):
@@ -61,5 +62,6 @@ class FindphoneSpider(scrapy.Spider):
         index = response.meta['index']
         values = list(self.towns[index].values())
         values.append(phone)
+        print(','.join(values))
         yield dict(zip(self.headers, values))
 

@@ -38,18 +38,18 @@ class WikisearchSpider(scrapy.Spider):
         
         # Get table of municipalities
         table = html.find('table', {"class": "wikitable sortable"})
-
-        # Get table headers
-        headers = [th.get_text().split('[')[0].strip() for th in table.find_all('th')]
-        FEED_EXPORT_FIELDS = headers
-
         # Get table rows
         rows = table.find_all('tr')
+        # Get table headers
+        headers = [th.get_text().split('[')[0].strip() for th in rows[0].find_all('th')]
+        FEED_EXPORT_FIELDS = headers
+        print(','.join(headers))
         for row in rows[1:]:
             elements = row.find_all('th')
             elements.extend(row.find_all('td'))
             if len(elements) == 0:
                 continue
             filtered_elements = [element_filter(e) for e in elements]
+            print(','.join(filtered_elements))
             yield dict(zip(headers, filtered_elements)) 
 
