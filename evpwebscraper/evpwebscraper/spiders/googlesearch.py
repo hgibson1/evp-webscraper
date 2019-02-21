@@ -16,17 +16,18 @@ class GooglesearchSpider(scrapy.Spider):
     name = 'googlesearch'
     allowed_domains = ['www.google.com']
 
-    def __init__(self, DATA_FILE_IN, town_column=TOWN_COLUMN, state=STATE, **kwargs):
+    def __init__(self, DATA_FILE_IN, column=COLUMN, state=STATE, search_for=SEARCH_FOR, **kwargs):
         # Read in towns
         self.towns = read_in_data(DATA_FILE_IN)
         # Start url is google search url for MA
-        self.start_urls = ['https://www.google.com/search?q=town-clerk-{}-{}&start=0'.format(
-            list(town.values())[town_column].lower().replace(' ',''), 
+        self.start_urls = ['https://www.google.com/search?q={}-clerk-{}-{}&start=0'.format(
+            search_for,
+            list(town.values())[column].lower().replace(' ',''), 
             state) for town in self.towns
         ]
         # Print headers
         self.headers = list(self.towns[0].keys())
-        self.headers.append('Town Clerk Website')
+        self.headers.append('{} Clerk Website'.format(search_for[0].upper() + search_for[1:]))
         FEED_EXPORT_FIELDS = self.headers
         print(','.join(self.headers))
         super().__init__(**kwargs)

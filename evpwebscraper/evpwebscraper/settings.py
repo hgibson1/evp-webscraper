@@ -97,3 +97,6 @@ AUTOTHROTTLE_DEBUG = True
 # Feed stuff
 FEED_FORMAT = 'csv'
 FEED_STORE_EMPTY = True
+
+# Allow error urls to be parsed
+HTTPERROR_ALLOWED_CODES = [301, 302, 307, 400, 401, 402, 404, 403, 416]
