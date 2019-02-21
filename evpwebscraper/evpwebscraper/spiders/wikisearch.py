@@ -9,7 +9,7 @@ from .. conf import *
 def filter_element(element):
     formated_element = ''
     try:
-        formated_element = re.sub('([\n\t,]|\[\d\])*', '', element.get_text().strip())
+        formated_element = re.sub('([\n\t,]|\[\d*\])*', '', element.get_text().strip())
     except IndexError: 
         formated_element = re.sub('([\n\t,]|\[\d\])*', '', element.find('a').get_text().strip())
     return ''.join(formated_element)
