@@ -40,7 +40,13 @@ class FindphoneSpider(scrapy.Spider):
         # Remove javascript and stylesheets
         for script in html(["script", "style"]):
             script.decompose()
-        
+       
+        # Remove elements that aren't displayed
+        for element in html.select('[style="display:none"]'):
+            element.decompose()
+        for element in html.select('[style="visibility:hidden"]'):
+            element.decompose()
+
         # Clean up remaining text and look for phone numbers
         # Phone numbers will be in string format number;number
         text = html.find_all(text=True, recursive=True)

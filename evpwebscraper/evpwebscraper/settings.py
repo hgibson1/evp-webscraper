@@ -96,3 +96,4 @@ AUTOTHROTTLE_DEBUG = True
 
 # Feed stuff
 FEED_FORMAT = 'csv'
+FEED_STORE_EMPTY = True
