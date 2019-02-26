@@ -56,7 +56,7 @@ class FindphoneSpider(scrapy.Spider):
         lines = []
         for t in text:
             line = filter_text(t)
-            if not line is None:
+            if not line is None and not line.string[line.start(0):line.end(0)] in lines:
                 lines.append(line.string[line.start(0):line.end(0)])
         phone = ';'.join(lines)
 

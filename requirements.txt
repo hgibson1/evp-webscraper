@@ -1,3 +1,4 @@
 scrapy
 BeautifulSoup4
 pylint
+wheel
