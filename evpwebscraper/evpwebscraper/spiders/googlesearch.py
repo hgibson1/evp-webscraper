@@ -79,13 +79,25 @@ class GooglesearchSpider(scrapy.Spider):
             )
         # Find first link with town name in domain and 'clerk' in url
         for link in website_links:
-            if re.match(pattern, link.lower()) and 'clerk' in link.lower():
+            if self.search_for == 'county' and re.match(pattern, link.lower()) and 'clerk' in link.lower():
+                website = link
+                break
+            elif self.search_for != 'county' and county != '' and not county in link.lower() and not 'county' in link.lower() and re.match(pattern, link.lower()) and 'clerk' in link.lower():
+                website = link
+                break
+            elif self.search_for != 'county' and county == '' and re.match(pattern, link.lower()) and 'clerk' in link.lower():
                 website = link
                 break
         # Otherwise find first link with town name in domain 
         if website is '':
             for link in website_links:
-                if re.match(pattern, link.lower()):
+                if self.search_for == 'county' and re.match(pattern, link.lower()):
+                    website = link
+                    break
+                elif self.search_for != 'county' and county != '' and not county in link.lower() and not 'county' in link.lower() and re.match(pattern, link.lower()):
+                    website = link
+                    break
+                elif self.search_for != 'county' and county == '' and re.match(pattern, link.lower()):
                     website = link
                     break
         # Otherwise find first link containing name of the town/county
@@ -97,7 +109,7 @@ class GooglesearchSpider(scrapy.Spider):
                 elif self.search_for != 'county' and county != '' and town in link.lower() and not county in link.lower() and not 'county' in link.lower():
                     website = link
                     break
-                elif self.search_for != 'county' and town in link.lower():
+                elif self.search_for != 'county' and county == '' and town in link.lower():
                     website = link
                     break
                 elif self.search_for != 'county' and county != '' and 'clerk' in link.lower() and not county in link.lower() and not 'county' in link.lower():
