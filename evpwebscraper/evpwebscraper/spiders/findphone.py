@@ -23,6 +23,7 @@ class FindphoneSpider(scrapy.Spider):
         # Print Headers
         self.headers = list(self.towns[0].keys())
         self.headers.append('{} Clerk Phone'.format(search_for[0].upper() + search_for[1:]))
+        self.headers.append('Notes')
         FEED_EXPORT_FIELDS = self.headers
         print(','.join(self.headers))
         super().__init__(**kwargs)  # python
@@ -54,22 +55,36 @@ class FindphoneSpider(scrapy.Spider):
         # Phone numbers will be in string format number;number
         text = html.find_all(text=True, recursive=True)
         lines = []
+        notes = ''
         for t in text:
+            if 'fax' in t.lower() and 'fax' not in notes:
+                notes = notes + "Some numbers are fax numbers "
+            if 'assistant' in t.lower() and 'assistant' not in notes:
+                notes = notes + "Some numbers are for assistant clerk or other administrative positions "
             line = filter_text(t)
             if not line is None and not line.string[line.start(0):line.end(0)] in lines:
                 lines.append(line.string[line.start(0):line.end(0)])
         phone = ';'.join(lines)
 
         values.append(phone)
+        if notes != '':
+            notes = notes + " Try first number for town clerk phone"
+        if phone == '':
+            notes = "Phone number not found try checking website manually"
+        values.append(notes)
         print(','.join(values))
         yield dict(zip(self.headers, values))
 
-    def parse_error(self, response):
-        # Just returns values 
+    def parse_error(self, failure):
+        # Returns original values and note on failure
         # Correspond information with town
-        index = response.meta['index']
-        values = list(self.towns[index].values())
+        index = failure.request.meta['index']
+        error = failure.getErrorMessage()
         
+        values = list(self.towns[index].values())
+        values.append('') # Phone number string, empty here
+        values.append(error)
+
         print(','.join(values))
         yield dict(zip(self.headers, values))
 
